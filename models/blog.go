@@ -25,7 +25,7 @@ func init() {
 }
 
 // Read is a function that get blogs from mysql.
-func (manager BlogManager) Read() []Blog {
+func (manager *BlogManager) Read() []Blog {
 	blogs := []Blog{}
 	o := orm.NewOrm()
 	id, err := o.QueryTable(new(Blog)).All(&blogs)
@@ -37,7 +37,7 @@ func (manager BlogManager) Read() []Blog {
 }
 
 // Create is a function that persist blog into mysql.
-func (manager BlogManager) Create(blog Blog) {
+func (manager *BlogManager) Create(blog Blog) {
 	o := orm.NewOrm()
 	id, err := o.Insert(&blog)
 
