@@ -3,10 +3,14 @@ package controllers
 import (
 	"blog/models"
 
+	"github.com/astaxie/beego/orm"
+
 	"github.com/astaxie/beego"
 )
 
-var blogManager = models.BlogManager{}
+var blogManager = models.BlogManager{
+	O: orm.NewOrm(),
+}
 
 // BlogController handles "/blog" routing.
 type BlogController struct {

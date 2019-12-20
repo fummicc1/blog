@@ -2,21 +2,27 @@ package models
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+
 	// import mysql
 	_ "github.com/go-sql-driver/mysql"
 )
 
+var logger *log.Logger = logs.GetLogger()
+
 // Blog is struct
 type Blog struct {
-	ID    int    `json:"id"`
+	ID    int    `orm:"auto;pk" json:"id"`
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
-// BlogManager stores blog data and handles CRUD.
+// BlogManager handles CRUD.
 type BlogManager struct {
+	O orm.Ormer
 }
 
 func init() {
@@ -27,24 +33,38 @@ func init() {
 // Read is a function that get blogs from mysql.
 func (manager *BlogManager) Read() []Blog {
 	blogs := []Blog{}
-	o := orm.NewOrm()
-	id, err := o.QueryTable(new(Blog)).All(&blogs)
+	o := manager.O
+	_, err := o.QueryTable(new(Blog)).All(&blogs)
 	if err != nil {
-		fmt.Printf("%s", err)
+		logs.Error(err)
 	}
-	fmt.Printf("id: %d", id)
+
+	logs.Info("success reading blogs")
+
+	if len(blogs) <= 10 {
+		return []Blog{
+			Blog{
+				Title: "タイトル１",
+				Body:  "これはテストデータ１",
+			},
+		}
+	}
+
 	return blogs
 }
 
 // Create is a function that persist blog into mysql.
-func (manager *BlogManager) Create(blog Blog) {
-	o := orm.NewOrm()
+func (manager *BlogManager) Create(blog Blog) error {
+	o := manager.O
 	id, err := o.Insert(&blog)
 
 	if err != nil {
 		fmt.Printf("%s", err)
+		return err
 	}
 
 	fmt.Printf("%d", id)
+
+	return nil
 
 }
