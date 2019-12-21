@@ -3,10 +3,13 @@ package controllers
 import (
 	"blog/models"
 
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 
 	"github.com/astaxie/beego"
 )
+
+var logger *logs.BeeLogger = beego.BeeLogger
 
 var blogManager = models.BlogManager{
 	O: orm.NewOrm(),
@@ -19,6 +22,7 @@ type BlogController struct {
 
 // Get is handler for "GET /blog".
 func (controller *BlogController) Get() {
+	logger.Debug("GET /blog")
 	controller.Data["blogs"] = blogManager.Read()
 	controller.TplName = "blog.html"
 }

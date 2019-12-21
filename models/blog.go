@@ -2,7 +2,8 @@ package models
 
 import (
 	"fmt"
-	"log"
+
+	"github.com/astaxie/beego"
 
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
@@ -11,7 +12,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var logger *log.Logger = logs.GetLogger()
+var logger *logs.BeeLogger = beego.BeeLogger
 
 // Blog is struct
 type Blog struct {
@@ -39,7 +40,7 @@ func (manager *BlogManager) Read() []Blog {
 		logs.Error(err)
 	}
 
-	logs.Info("success reading blogs")
+	logs.Debug("success reading blogs")
 
 	if len(blogs) <= 10 {
 		return []Blog{
