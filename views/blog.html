@@ -8,38 +8,30 @@
   <title>Blog</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <style>
-    body {
-      background-color: #f0f0f0;
-    }
-
-    #intro {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 48px;
-      text-align: center;
-    }
-  </style>
 </head>
 
 <body>
-  <h1 id="intro">
-    fummicc1's blog
-  </h1>
 
-  <div class="blogs container">
+  <div class="container">
+    <h1 class="jambotron mt-5">
+      fummicc1's blog
+    </h1>
 
     {{ range $blog := .blogs }}
 
-    <div class="row">
-      <div id="blog_title">
-        {{ $blog.Title }}
-      </div>
+    <div class="card mt-5">
 
-      <div id="blog_body">
+      <h3 class="card-title">
+        {{ $blog.Title }}
+      </h3>
+
+      <p class="card-text">
         {{ $blog.Body }}
-      </div>
-      {{ end }}
+      </p>
+
     </div>
+
+    {{end}}
   </div>
 </body>
 

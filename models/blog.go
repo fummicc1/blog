@@ -1,8 +1,6 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/astaxie/beego"
 
 	"github.com/astaxie/beego/logs"
@@ -48,6 +46,10 @@ func (manager *BlogManager) Read() []Blog {
 				Title: "タイトル１",
 				Body:  "これはテストデータ１",
 			},
+			Blog{
+				Title: "タイトル2",
+				Body:  "これはテストデータ2",
+			},
 		}
 	}
 
@@ -60,12 +62,9 @@ func (manager *BlogManager) Create(blog Blog) error {
 	id, err := o.Insert(&blog)
 
 	if err != nil {
-		fmt.Printf("%s", err)
+		logger.Error("%s", err)
 		return err
 	}
-
-	fmt.Printf("%d", id)
-
+	logger.Debug("id: %d", id)
 	return nil
-
 }
