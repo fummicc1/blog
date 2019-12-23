@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/astaxie/beego"
+	"time"
 
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
@@ -10,13 +10,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var logger *logs.BeeLogger = beego.BeeLogger
-
 // Blog is struct
 type Blog struct {
-	ID    int    `orm:"auto;pk" json:"id"`
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	ID   int       `orm:"auto;pk" form:"-"`
+	Body string    `form:"body"`
+	Date time.Time `form:"-"`
 }
 
 // BlogManager handles CRUD.
@@ -25,6 +23,7 @@ type BlogManager struct {
 }
 
 func init() {
+	logs.Debug("init blog in \"models\" package")
 	orm.RegisterModel(new(Blog))
 	orm.RegisterDataBase("default", "mysql", "root:PASSWORD@tcp(localhost:3306)/blog?charset=utf8", 30)
 }
@@ -43,12 +42,12 @@ func (manager *BlogManager) Read() []Blog {
 	if len(blogs) <= 10 {
 		return []Blog{
 			Blog{
-				Title: "タイトル１",
-				Body:  "これはテストデータ１",
+				Body: "これはテストデータ１",
+				Date: time.Now(),
 			},
 			Blog{
-				Title: "タイトル2",
-				Body:  "これはテストデータ2",
+				Body: "これはテストデータ2",
+				Date: time.Now(),
 			},
 		}
 	}
@@ -57,14 +56,14 @@ func (manager *BlogManager) Read() []Blog {
 }
 
 // Create is a function that persist blog into mysql.
-func (manager *BlogManager) Create(blog Blog) error {
+func (manager *BlogManager) Create(blog *Blog) error {
 	o := manager.O
-	id, err := o.Insert(&blog)
+	id, err := o.Insert(blog)
 
 	if err != nil {
-		logger.Error("%s", err)
+		logs.Error("%s", err)
 		return err
 	}
-	logger.Debug("id: %d", id)
+	logs.Debug("id: %d", id)
 	return nil
 }
