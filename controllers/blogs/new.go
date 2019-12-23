@@ -23,5 +23,5 @@ func init() {
 
 func (c *NewBlogController) Get() {
 	logs.Debug("Get /blog/new")
-	c.TplName = "blog/create.html"
+	c.TplName = "blog/new.html"
 }
